@@ -1,6 +1,5 @@
 package jeasy;
 
-import org.jeasy.rules.api.Fact;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

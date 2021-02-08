@@ -7,7 +7,6 @@ spring:
     driver-class-name: org.h2.Driver
     username: user
     password: password
-    data: classpath:/data/weapon_data.sql,classpath:/data/armour_data.sql
   jpa:
     hibernate:
       ddl-auto: create-drop
