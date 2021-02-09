@@ -2,6 +2,7 @@ package jeasy.entities;
 
 import com.github.javafaker.Faker;
 import jeasy.enums.Gender;
+import jeasy.enums.Nationality;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,6 +32,9 @@ public class Person {
     private int age;
 
     @Enumerated(EnumType.STRING)
+    private Nationality nationality;
+
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     private int psleScore;
@@ -50,6 +54,7 @@ public class Person {
                 .psleScore(150 + random.nextInt(150))
                 .tookALevels(random.nextBoolean())
                 .tookOLevels(random.nextBoolean())
+                .nationality(Nationality.pick())
                 .build();
         if ( person.tookALevels ) {
             person.aLevelScore = random.nextInt(6);

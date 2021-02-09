@@ -1,7 +1,10 @@
 package jeasy.controllers;
 
 import jeasy.entities.Person;
+import jeasy.enums.Gender;
+import jeasy.enums.Nationality;
 import jeasy.rules.RulesEngineService;
+import jeasy.schemes.TrueBlueSingaporeanScheme;
 import org.jeasy.rules.api.Fact;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rule;
@@ -21,37 +24,25 @@ public class JeasyRestController {
 
         Facts facts = buildFactsForPerson(person);
 
-        Rule psleRule = new RuleBuilder()
-                .name("Must pass PSLE Rule")
-                .description("If person passes PSLE, then ok")
-                .when((facts1) -> facts1.get("PSLE Fact").equals(true))
-                .then((facts1 -> System.out.println(facts1.get("name")+ " passed PSLE")))
-                .build();
-        Rule oLevelRule = new RuleBuilder()
-                .name("Must pass O Levels Rule")
-                .description("If person passes PSLE, then ok")
-                .when((facts1) -> facts1.get("OLevel Fact").equals(true))
-                .then((facts1 -> System.out.println(facts1.get("name")+ " passed O Levels")))
-                .build();
-        Rules rules = new Rules();
-
-        rules.register(oLevelRule);
-        rules.register(psleRule);
-
 
         RulesEngineService service = new RulesEngineService();
-        service.trigger(rules, facts);
+        service.trigger(TrueBlueSingaporeanScheme.builder().build().retrieveRules(), facts);
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
     private Facts buildFactsForPerson(Person person) {
         Facts facts = new Facts();
-        Fact<Boolean> psleFact = new Fact<>("PSLE Fact", person.getPsleScore() > 250 );
-        Fact<Boolean> oLevelFact = new Fact<>("OLevel Fact", person.isTookOLevels() && person.getOLevelScore() < 16);
+        Fact<Boolean> hasOLevelFact = new Fact<>("tookOLevels", person.isTookOLevels());
+        Fact<Integer> oLevelScore = new Fact<>("oLevelScore", person.getOLevelScore());
         Fact<String> nameOfPerson = new Fact<>("name", person.getName());
+        Fact<Gender> genderOfPerson = new Fact<>("gender", person.getGender());
+        Fact<Nationality> nationalityOfPerson = new Fact<>("nationality", person.getNationality());
 
-        facts.add(psleFact);
-        facts.add(oLevelFact);
+        facts.add(nameOfPerson);
+        facts.add(genderOfPerson);
+        facts.add(nationalityOfPerson);
+        facts.add(hasOLevelFact);
+        facts.add(oLevelScore);
         return facts;
     }
 }
