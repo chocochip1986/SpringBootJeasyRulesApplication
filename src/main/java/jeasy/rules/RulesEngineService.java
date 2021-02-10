@@ -3,7 +3,6 @@ package jeasy.rules;
 
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rules;
-import org.jeasy.rules.api.RulesEngine;
 import org.jeasy.rules.core.DefaultRulesEngine;
 
 import java.util.concurrent.ExecutorService;
@@ -17,14 +16,7 @@ public class RulesEngineService {
     }
 
     public void trigger(Rules rules, Facts facts) {
-        this.executorService.execute(() -> {
-            try {
-                System.out.println("Thread: "+ Thread.currentThread().getId()+" Time: "+System.currentTimeMillis());
-                RulesEngine rulesEngine = new DefaultRulesEngine();
-                rulesEngine.fire(rules, facts);
-            } catch (Exception e) {
-                Thread.currentThread().interrupt();
-            }
-        });
+        RulesEngineTask task = new RulesEngineTask(new DefaultRulesEngine(), rules, facts);
+        this.executorService.execute(task);
     }
 }
