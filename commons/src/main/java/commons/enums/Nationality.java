@@ -1,4 +1,4 @@
-package jeasy.enums;
+package commons.enums;
 
 import java.util.Random;
 

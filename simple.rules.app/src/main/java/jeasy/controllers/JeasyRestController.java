@@ -1,8 +1,8 @@
 package jeasy.controllers;
 
-import jeasy.entities.Person;
-import jeasy.enums.Gender;
-import jeasy.enums.Nationality;
+import commons.entities.Person;
+import commons.enums.Gender;
+import commons.enums.Nationality;
 import jeasy.rules.RulesEngineService;
 import jeasy.schemes.TrueBlueSingaporeanScheme;
 import org.jeasy.rules.api.Fact;

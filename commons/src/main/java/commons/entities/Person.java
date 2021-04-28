@@ -1,8 +1,8 @@
-package jeasy.entities;
+package commons.entities;
 
 import com.github.javafaker.Faker;
-import jeasy.enums.Gender;
-import jeasy.enums.Nationality;
+import commons.enums.Gender;
+import commons.enums.Nationality;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

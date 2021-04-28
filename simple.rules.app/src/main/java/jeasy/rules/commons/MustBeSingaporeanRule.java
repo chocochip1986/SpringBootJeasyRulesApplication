@@ -1,7 +1,7 @@
 package jeasy.rules.commons;
 
-import jeasy.enums.Gender;
-import jeasy.enums.Nationality;
+import commons.enums.Gender;
+import commons.enums.Nationality;
 import org.jeasy.rules.annotation.Action;
 import org.jeasy.rules.annotation.Condition;
 import org.jeasy.rules.annotation.Fact;
