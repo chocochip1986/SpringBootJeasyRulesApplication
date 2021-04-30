@@ -12,6 +12,7 @@
         <module>simple.rules.app</module>
         <module>commons</module>
         <module>multi.threaded.rules.app</module>
+        <module>bespoke.rules.engine</module>
     </modules>
     <name>Spring Boot Jeasy Application</name>
     <description>This  is a simple spring boot jeasy rules engine application</description>

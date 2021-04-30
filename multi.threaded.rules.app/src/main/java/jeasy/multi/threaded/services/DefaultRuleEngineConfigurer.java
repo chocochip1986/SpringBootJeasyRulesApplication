@@ -5,6 +5,7 @@ import jeasy.multi.threaded.services.steps.retrieve.cohort.RetrieveCohort;
 import jeasy.multi.threaded.services.steps.rules.GenerateRules;
 import org.jeasy.rules.api.Rule;
 import org.jeasy.rules.core.BasicRule;
+import org.jeasy.rules.core.RuleBuilder;
 import org.jeasy.rules.mvel.MVELRule;
 
 import java.util.Collections;
