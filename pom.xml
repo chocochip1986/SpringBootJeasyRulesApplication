@@ -17,23 +17,8 @@
     <name>Spring Boot Jeasy Application</name>
     <description>This  is a simple spring boot jeasy rules engine application</description>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-
     <properties>
+        <java.version>11</java.version>
         <maven.compiler.source>15</maven.compiler.source>
         <maven.compiler.target>15</maven.compiler.target>
         <springboot.version>2.4.1</springboot.version>
