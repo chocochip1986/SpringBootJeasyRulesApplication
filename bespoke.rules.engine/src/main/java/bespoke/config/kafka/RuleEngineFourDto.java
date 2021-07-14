@@ -8,11 +8,12 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
 public class RuleEngineFourDto {
     private DisbursementSchemeConfig config;
-    private Rules<RuleEngineSubject, List<RunResult>> rules;
+    private Rules<RuleEngineSubject, Map<Long, List<RunResult>>> rules;
     private List<RuleEngineSubject> subjects;
 }

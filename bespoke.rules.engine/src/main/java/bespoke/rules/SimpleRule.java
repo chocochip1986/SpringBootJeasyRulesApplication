@@ -10,8 +10,8 @@ public class SimpleRule<C,R> implements Rule<C,R> {
     private String description;
     private int priority;
     private Condition<C> condition;
-    private List<Action> actions;
-    private List<Action> failureActions;
+    private List<Action<C,R>> actions;
+    private List<Action<C,R>> failureActions;
 
     public SimpleRule() {
         this.name = "Rule Name";
@@ -39,12 +39,12 @@ public class SimpleRule<C,R> implements Rule<C,R> {
         return this;
     }
 
-    public SimpleRule<C,R> then(Action<R> action) {
+    public SimpleRule<C,R> then(Action<C, R> action) {
         this.actions.add(action);
         return this;
     }
 
-    public SimpleRule<C,R> orElse(Action<R> action) {
+    public SimpleRule<C,R> orElse(Action<C, R> action) {
         this.failureActions.add(action);
         return this;
     }
@@ -55,9 +55,9 @@ public class SimpleRule<C,R> implements Rule<C,R> {
     }
 
     @Override
-    public void execute(R r) {
+    public void execute(R r, C c) {
         for(int i = 0 ; i < this.actions.size() ; i++) {
-            this.actions.get(i).execute(r);
+            this.actions.get(i).execute(c, r);
         }
     }
 

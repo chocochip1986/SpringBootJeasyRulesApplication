@@ -25,7 +25,7 @@ public class DefaultRuleEngine<C,R> implements RuleEngine<C,R> {
                 if ( rule.evaluate(c) ) {
                     int size = rule.getActions().size();
                     for( int i = 0 ; i < size ; i++ ) {
-                        rule.getActions().get(i).execute(r1);
+                        rule.getActions().get(i).execute(c, r1);
                     }
                     //DO POST PROCESSING
                     postProcessor.execute();
@@ -33,7 +33,7 @@ public class DefaultRuleEngine<C,R> implements RuleEngine<C,R> {
                     System.out.println("Rule ["+rule.getRuleName()+"] failed...");
                     int size = rule.getFailureActions().size();
                     for( int i = 0 ; i < size ; i++ ) {
-                        rule.getFailureActions().get(i).execute(r2);
+                        rule.getFailureActions().get(i).execute(c, r2);
                     }
                 }
             }

@@ -1,6 +1,6 @@
 package bespoke.rules;
 
 @FunctionalInterface
-public interface Action<RESULT> {
-    void execute(RESULT r);
+public interface Action<COHORT, RESULT> {
+    void execute(COHORT c, RESULT r);
 }

@@ -1,23 +1,22 @@
 package bespoke.entities;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-public class RunResult {
-    private String id;
+public class RunSummary {
+    @Id
+    private Long id;
     private Long personId;
-    private String ruleName;
-    private Long conditionId;
-    private boolean isPass;
-    private String remark;
-    private String actualValue;
+    private boolean pass;
 }

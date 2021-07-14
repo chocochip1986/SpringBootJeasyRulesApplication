@@ -34,11 +34,11 @@ public class Runner {
                     rule = rule.name("")
                             .description("")
                             .when(parameter.create(conditions.get(k).getOperator(), conditions.get(k).getValue()))
-                            .then((r) -> {
-                                r.add(RunResult.builder().isPass(true).conditionId(conditionId).actualValue(value).build());
+                            .then((c, r) -> {
+                                r.add(RunResult.builder().isPass(true).personId(c.getPerson().getId()).conditionId(conditionId).actualValue(value).build());
                             })
-                            .orElse((r)->{
-                                r.add(RunResult.builder().isPass(false).conditionId(conditionId).actualValue(value).build());
+                            .orElse((c, r)->{
+                                r.add(RunResult.builder().isPass(false).personId(c.getPerson().getId()).conditionId(conditionId).actualValue(value).build());
                             });
 
                     ruleEngineRules.add(rule);
