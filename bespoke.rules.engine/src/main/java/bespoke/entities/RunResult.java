@@ -10,6 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class RunResult {
+    private String id;
     private String ruleName;
+    private Long conditionId;
     private boolean isPass;
+    private String remark;
+    private String actualValue;
 }

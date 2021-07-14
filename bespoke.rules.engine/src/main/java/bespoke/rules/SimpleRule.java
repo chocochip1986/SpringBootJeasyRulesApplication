@@ -5,12 +5,13 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class SimpleRule<C> implements Rule<C> {
+public class SimpleRule<C,R> implements Rule<C,R> {
     private String name;
     private String description;
     private int priority;
     private Condition<C> condition;
     private List<Action> actions;
+    private List<Action> failureActions;
 
     public SimpleRule() {
         this.name = "Rule Name";
@@ -18,28 +19,33 @@ public class SimpleRule<C> implements Rule<C> {
         this.priority = 2147483647;
     }
 
-    public SimpleRule<C> name(String name) {
+    public SimpleRule<C,R> name(String name) {
         this.name = name;
         return this;
     }
 
-    public SimpleRule<C> description(String description) {
+    public SimpleRule<C,R> description(String description) {
         this.description = description;
         return this;
     }
 
-    public SimpleRule<C> priority(int priority) {
+    public SimpleRule<C,R> priority(int priority) {
         this.priority = priority;
         return this;
     }
 
-    public SimpleRule<C> when(Condition<C> condition) {
+    public SimpleRule<C,R> when(Condition<C> condition) {
         this.condition = condition;
         return this;
     }
 
-    public SimpleRule<C> then(Action action) {
+    public SimpleRule<C,R> then(Action<R> action) {
         this.actions.add(action);
+        return this;
+    }
+
+    public SimpleRule<C,R> orElse(Action<R> action) {
+        this.failureActions.add(action);
         return this;
     }
 
@@ -49,9 +55,9 @@ public class SimpleRule<C> implements Rule<C> {
     }
 
     @Override
-    public void execute() {
+    public void execute(R r) {
         for(int i = 0 ; i < this.actions.size() ; i++) {
-            this.actions.get(i).execute();
+            this.actions.get(i).execute(r);
         }
     }
 
@@ -66,7 +72,7 @@ public class SimpleRule<C> implements Rule<C> {
     }
 
     @Override
-    public int compareTo(Rule<C> rule) {
+    public int compareTo(Rule<C,R> rule) {
         if (this.priority < rule.getPriority()) {
             return -1;
         } else {

@@ -4,18 +4,18 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-public class Rules<C> {
-    private TreeSet<Rule<C>> rules;
+public class Rules<C,R> {
+    private TreeSet<Rule<C,R>> rules;
 
     public Rules() {
         this.rules = new TreeSet<>();
     }
 
-    public void addRules(Rule<C>... rules) {
+    public void addRules(Rule<C,R>... rules) {
         Collections.addAll(this.rules, rules);
     }
 
-    public void addRule(Rule<C> rule) {
+    public void addRule(Rule<C,R> rule) {
         if( this.rules.contains(rule) ) {
             this.rules.remove(rule);
         } else {
@@ -23,11 +23,11 @@ public class Rules<C> {
         }
     }
 
-    public boolean removeRule(Rule<C> rule) {
+    public boolean removeRule(Rule<C,R> rule) {
         return this.rules.remove(rule);
     }
 
-    public Rule<C> findRuleByName(Rule<C> rule) {
+    public Rule<C,R> findRuleByName(Rule<C,R> rule) {
         return this.rules.stream().filter( r -> r.getRuleName().equals(rule.getRuleName()) ).findFirst().orElse(null);
     }
 
@@ -39,7 +39,7 @@ public class Rules<C> {
         this.rules.clear();
     }
 
-    public Iterator<Rule<C>> getIterator() {
+    public Iterator<Rule<C,R>> getIterator() {
         return this.rules.iterator();
     }
 }

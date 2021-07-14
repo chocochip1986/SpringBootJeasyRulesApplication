@@ -2,8 +2,7 @@ package bespoke.rule.engine;
 
 import bespoke.rules.Rules;
 
-import java.util.List;
 
-public interface RuleEngine<C> {
-    void trigger(Rules<C> rules, C c);
+public interface RuleEngine<C,R> {
+    void trigger(Rules<C,R> rules, C c, R r);
 }
