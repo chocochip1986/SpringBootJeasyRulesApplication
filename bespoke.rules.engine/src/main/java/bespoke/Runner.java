@@ -42,12 +42,9 @@ public class Runner {
                             });
 
                     ruleEngineRules.add(rule);
-                    //Get the correct check function
                 }
             }
         }
-
-
     }
 
 

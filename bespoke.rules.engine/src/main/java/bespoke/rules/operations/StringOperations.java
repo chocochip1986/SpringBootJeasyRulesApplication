@@ -1,4 +1,4 @@
-package bespoke.rules.operators;
+package bespoke.rules.operations;
 
 import bespoke.enums.Operator;
 

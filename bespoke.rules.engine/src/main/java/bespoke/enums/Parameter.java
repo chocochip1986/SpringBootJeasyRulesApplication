@@ -2,8 +2,8 @@ package bespoke.enums;
 
 import bespoke.rules.Condition;
 import bespoke.rules.CreateRuleFunction;
-import bespoke.rules.operators.DateOperations;
-import bespoke.rules.operators.StringOperations;
+import bespoke.rules.operations.DateOperations;
+import bespoke.rules.operations.StringOperations;
 import bespoke.rules.poojo.RuleEngineSubject;
 
 import java.time.LocalDateTime;

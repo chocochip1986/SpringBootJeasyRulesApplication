@@ -9,6 +9,7 @@ public interface Rule<C,R> extends Comparable<Rule<C,R>> {
 
     default Condition<C> getCondition() { return null; };
     default List<Action<R>> getActions() { return null; };
+    default List<Action<R>> getFailureActions() {return null;}
     default String getRuleName() { return "Default Rule Name"; };
     default String getRuleDescription() { return "Default Rule Description"; };
     int getPriority();

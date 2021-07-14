@@ -15,7 +15,7 @@ public class DefaultRuleEngine<C,R> implements RuleEngine<C,R> {
         this.postProcessor = builder.postProcessor;
     }
     @Override
-    public void trigger(Rules<C,R> rules, C c, R r) {
+    public void trigger(Rules<C,R> rules, C c, R r1, R r2) {
         if (rules.isEmpty()) {
             System.out.println("No rules so nothing ran...");
         } else {
@@ -25,12 +25,16 @@ public class DefaultRuleEngine<C,R> implements RuleEngine<C,R> {
                 if ( rule.evaluate(c) ) {
                     int size = rule.getActions().size();
                     for( int i = 0 ; i < size ; i++ ) {
-                        rule.getActions().get(i).execute(r);
+                        rule.getActions().get(i).execute(r1);
                     }
                     //DO POST PROCESSING
                     postProcessor.execute();
                 } else {
                     System.out.println("Rule ["+rule.getRuleName()+"] failed...");
+                    int size = rule.getFailureActions().size();
+                    for( int i = 0 ; i < size ; i++ ) {
+                        rule.getFailureActions().get(i).execute(r2);
+                    }
                 }
             }
         }
