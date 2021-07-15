@@ -147,7 +147,7 @@ public class RuleEngineService {
         }
     }
 
-    private List<RunResult> processRunResults(Map<Long, RuleEngineResult> runResults) {
+    public List<RunResult> processRunResults(Map<Long, RuleEngineResult> runResults) {
         List<RunResult> combinedRunResults = new ArrayList<>();
         runResults.forEach((personId, personRunResults) -> {
             combinedRunResults.addAll(personRunResults.getRunResults());
@@ -156,7 +156,7 @@ public class RuleEngineService {
         return combinedRunResults;
     }
 
-    private List<RunSummary> processRunSummaries(Map<Long, RuleEngineResult> runResults) {
+    public List<RunSummary> processRunSummaries(Map<Long, RuleEngineResult> runResults) {
         List<RunSummary> summaries = new ArrayList<>();
 
         runResults.forEach((personId, runResult) -> {
@@ -166,7 +166,7 @@ public class RuleEngineService {
         return summaries;
     }
 
-    private Rules<RuleEngineSubject, Map<Long, RuleEngineResult>> generateRuleEngineRules(List<Rule> rules) {
+    public Rules<RuleEngineSubject, Map<Long, RuleEngineResult>> generateRuleEngineRules(List<Rule> rules) {
         Rules<RuleEngineSubject, Map<Long, RuleEngineResult>> ruleEngineRules = new Rules<>();
         for ( int i = 0 ; i < rules.size() ; i++ ) {
             List<Criterion> criteria = rules.get(i).getCriteriaList();

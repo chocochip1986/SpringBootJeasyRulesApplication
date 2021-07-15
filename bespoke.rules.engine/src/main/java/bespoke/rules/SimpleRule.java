@@ -2,6 +2,7 @@ package bespoke.rules;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -17,6 +18,8 @@ public class SimpleRule<C,R> implements Rule<C,R> {
         this.name = "Rule Name";
         this.description = "Rule Description";
         this.priority = 2147483647;
+        this.actions = new ArrayList<>();
+        this.failureActions = new ArrayList<>();
     }
 
     public SimpleRule<C,R> name(String name) {
