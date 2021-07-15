@@ -1,5 +1,6 @@
 package bespoke.config.kafka;
 
+import bespoke.exceptions.FatalApplicationLayerException;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -18,6 +19,8 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.listener.SeekToCurrentErrorHandler;
+import org.springframework.util.backoff.FixedBackOff;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +53,7 @@ public class KafkaConfig {
     public ConcurrentKafkaListenerContainerFactory<String, byte[]> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, byte[]> factory = new ConcurrentKafkaListenerContainerFactory<String, byte[]>();
         factory.setConsumerFactory(consumerFactory());
+        factory.setErrorHandler(eh());
         return factory;
     }
 
@@ -65,5 +69,16 @@ public class KafkaConfig {
     @Bean
     public KafkaTemplate<String, byte[]> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
+    }
+
+    @Bean
+    public SeekToCurrentErrorHandler eh() {
+        SeekToCurrentErrorHandler eh = new SeekToCurrentErrorHandler((record, e) -> {
+            System.out.println("RECORD from topic " +record.topic()+
+                    " at partition "+record.partition()+" at offset "+record.offset()+
+                    " did not process correctly due to a "+e.getClass().getName()+". No retries were made");
+        }, new FixedBackOff(0L, 1L));
+        eh.addNotRetryableExceptions(FatalApplicationLayerException.class);
+        return eh;
     }
 }
