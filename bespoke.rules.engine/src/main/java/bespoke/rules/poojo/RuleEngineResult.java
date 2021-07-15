@@ -12,6 +12,7 @@ import java.util.Map;
 @Data
 public class RuleEngineResult {
     private List<RunResult> runResults;
+    //Map of {"ruleId" -> { Map of "criterionId" -> { list of booleans } }}
     private Map<Long, Map<Long, List<Boolean>>> resultMatrix;
 
     public RuleEngineResult() {
@@ -44,5 +45,20 @@ public class RuleEngineResult {
                 }});
             }});
         }
+    }
+
+    public boolean deriveNetPassOrFail() {
+        List<List<Boolean>> results = new ArrayList<>();
+        this.resultMatrix.forEach((ruleId, vCriterionMap) -> {
+            results.add(new ArrayList<>());
+            vCriterionMap.forEach((criterionId, listOfBooleans) -> {
+                results.get(results.size()-1).add(listOfBooleans.stream().reduce(true, (a,b) -> a && b));
+            });
+        });
+
+        return results.stream()
+                .map(rule -> rule.stream()
+                        .reduce(false, (a,b) -> a || b))
+                .reduce(true, (a,b) -> a && b);
     }
 }

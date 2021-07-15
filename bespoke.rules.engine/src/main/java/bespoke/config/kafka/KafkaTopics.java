@@ -31,4 +31,9 @@ public class KafkaTopics {
     public NewTopic topic5() {
         return TopicBuilder.name("topic.five").build();
     }
+
+    @Bean
+    public NewTopic topic6() {
+        return TopicBuilder.name("topic.six").build();
+    }
 }

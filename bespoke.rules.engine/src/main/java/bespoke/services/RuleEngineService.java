@@ -123,23 +123,9 @@ public class RuleEngineService {
     private List<RunSummary> processRunResults(Map<Long, RuleEngineResult> runResults) {
         List<RunSummary> summaries = new ArrayList<>();
 
-        List<List<List<Condition>>> list = new ArrayList<>() {{
-           add(new ArrayList<>() {{
-               add(new ArrayList<>());
-           }});
-        }};
-
-        List<List<Boolean>> criteria = new ArrayList<>() {{
-            add(new ArrayList<>());
-        }};
-
-        boolean pass = list.stream()
-                .map(r -> r.stream()
-                        .map(cr -> cr.stream()
-                                .map(Condition::getPass)
-                                .reduce(true, (a, b) -> a && b))
-                        .reduce(false, (a, b) -> a || b))
-                .reduce(true, (a,b) -> a && b);
+        runResults.forEach((personId, runResult) -> {
+            summaries.add(RunSummary.builder().personId(personId).pass(runResult.deriveNetPassOrFail()).build());
+        });
 
         return summaries;
     }
