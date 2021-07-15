@@ -3,6 +3,7 @@ package bespoke.services;
 import bespoke.config.kafka.InitRuleEngineDto;
 import bespoke.config.kafka.KafkaProducer;
 import bespoke.config.kafka.RuleEngineDto;
+import bespoke.config.kafka.RuleEngineFiveDto;
 import bespoke.config.kafka.RuleEngineFourDto;
 import bespoke.config.kafka.RuleEngineThreeDto;
 import bespoke.config.kafka.RuleEngineTwoDto;
@@ -117,10 +118,25 @@ public class RuleEngineService {
             ruleEngine.trigger(dto.getRules(), subjects.get(i), runResults, runResults);
         }
 
-        List<RunSummary> runSummaries = processRunResults(runResults);
+        List<RunSummary> runSummaries = Collections.unmodifiableList(processRunSummaries(runResults));
+        List<RunResult> combinedRunResults = Collections.unmodifiableList(processRunResults(runResults));
+        send("topic.six", RuleEngineFiveDto.builder().runSummaries(runSummaries).runResults(combinedRunResults).build());
     }
 
-    private List<RunSummary> processRunResults(Map<Long, RuleEngineResult> runResults) {
+    public void persistCohortPageInfo(RuleEngineFiveDto dto) {
+
+    }
+
+    private List<RunResult> processRunResults(Map<Long, RuleEngineResult> runResults) {
+        List<RunResult> combinedRunResults = new ArrayList<>();
+        runResults.forEach((personId, personRunResults) -> {
+            combinedRunResults.addAll(personRunResults.getRunResults());
+        });
+
+        return combinedRunResults;
+    }
+
+    private List<RunSummary> processRunSummaries(Map<Long, RuleEngineResult> runResults) {
         List<RunSummary> summaries = new ArrayList<>();
 
         runResults.forEach((personId, runResult) -> {

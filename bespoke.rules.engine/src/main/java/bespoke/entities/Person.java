@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
@@ -21,6 +23,7 @@ import java.util.List;
 @Entity
 public class Person implements Evaluatable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "person_generator")
     private Long id;
     private String name;
     private String nric;

@@ -68,6 +68,16 @@ public class KafkaConsumers {
         }
     }
 
+    @KafkaListener(topics = "topic.six", containerFactory = "kafkaListenerContainerFactory")
+    public void persistCohortPageInfo(ConsumerRecord<String, byte[]> record) {
+        RuleEngineFiveDto dto = convert(record.value(), RuleEngineFiveDto.class);
+        if (Objects.isNull(dto)) {
+            System.out.println("JIALAT!");
+        } else {
+            ruleEngineService.persistCohortPageInfo(dto);
+        }
+    }
+
     private <T> T convert(byte[] payload, Class<T> klass) {
         try {
             return this.objectMapper.readValue(payload, klass);
