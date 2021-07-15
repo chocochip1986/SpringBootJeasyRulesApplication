@@ -21,6 +21,7 @@ import bespoke.jpa.PersonJpaRepo;
 import bespoke.rule.engine.DefaultRuleEngine;
 import bespoke.rules.Rules;
 import bespoke.rules.SimpleRule;
+import bespoke.rules.poojo.RuleEngineResult;
 import bespoke.rules.poojo.RuleEngineSubject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -73,7 +74,7 @@ public class RuleEngineService {
             return;
         }
 
-        Rules<RuleEngineSubject, Map<Long, List<RunResult>>> rules = generateRuleEngineRules(dto.getRules());
+        Rules<RuleEngineSubject, Map<Long, RuleEngineResult>> rules = generateRuleEngineRules(dto.getRules());
 
         if(Objects.isNull(rules) || rules.isEmpty()) {
             System.out.println("No List<SimpleRule<RuleEngineSubject, List<RunResult>>> rules la!");
@@ -108,10 +109,10 @@ public class RuleEngineService {
     }
 
     public void processCohortPage(RuleEngineFourDto dto) {
-        DefaultRuleEngine<RuleEngineSubject, Map<Long, List<RunResult>>> ruleEngine = DefaultRuleEngine.<RuleEngineSubject, Map<Long, List<RunResult>>>builder().build();
+        DefaultRuleEngine<RuleEngineSubject, Map<Long, RuleEngineResult>> ruleEngine = DefaultRuleEngine.<RuleEngineSubject, Map<Long, RuleEngineResult>>builder().build();
 
         List<RuleEngineSubject> subjects = dto.getSubjects();
-        Map<Long, List<RunResult>> runResults = new HashMap<>();
+        Map<Long, RuleEngineResult> runResults = new HashMap<>();
         for ( int i = 0 ; i < subjects.size() ; i++ ) {
             ruleEngine.trigger(dto.getRules(), subjects.get(i), runResults, runResults);
         }
@@ -119,13 +120,32 @@ public class RuleEngineService {
         List<RunSummary> runSummaries = processRunResults(runResults);
     }
 
-    private List<RunSummary> processRunResults(Map<Long, List<RunResult>> runResults) {
+    private List<RunSummary> processRunResults(Map<Long, RuleEngineResult> runResults) {
         List<RunSummary> summaries = new ArrayList<>();
+
+        List<List<List<Condition>>> list = new ArrayList<>() {{
+           add(new ArrayList<>() {{
+               add(new ArrayList<>());
+           }});
+        }};
+
+        List<List<Boolean>> criteria = new ArrayList<>() {{
+            add(new ArrayList<>());
+        }};
+
+        boolean pass = list.stream()
+                .map(r -> r.stream()
+                        .map(cr -> cr.stream()
+                                .map(Condition::getPass)
+                                .reduce(true, (a, b) -> a && b))
+                        .reduce(false, (a, b) -> a || b))
+                .reduce(true, (a,b) -> a && b);
+
         return summaries;
     }
 
-    private Rules<RuleEngineSubject, Map<Long, List<RunResult>>> generateRuleEngineRules(List<Rule> rules) {
-        Rules<RuleEngineSubject, Map<Long, List<RunResult>>> ruleEngineRules = new Rules<>();
+    private Rules<RuleEngineSubject, Map<Long, RuleEngineResult>> generateRuleEngineRules(List<Rule> rules) {
+        Rules<RuleEngineSubject, Map<Long, RuleEngineResult>> ruleEngineRules = new Rules<>();
         for ( int i = 0 ; i < rules.size() ; i++ ) {
             List<Criterion> criteria = rules.get(i).getCriteriaList();
             for ( int j = 0 ; j < criteria.size() ; j++ ) {
@@ -134,15 +154,17 @@ public class RuleEngineService {
                     //Based on the parameter
                     Parameter parameter = conditions.get(k).getParameter();
 
-                    SimpleRule<RuleEngineSubject, Map<Long, List<RunResult>>> rule = new SimpleRule<>();
+                    SimpleRule<RuleEngineSubject, Map<Long, RuleEngineResult>> rule = new SimpleRule<>();
 
                     Long conditionId = conditions.get(k).getId();
                     String value = conditions.get(k).getValue();
+                    int ruleIndex = i;
+                    int criterionIndex = j;
                     rule = rule.name("")
                             .description("")
                             .when(parameter.create(conditions.get(k).getOperator(), conditions.get(k).getValue()))
                             .then((c, r) -> {
-                                this.addPassAction(c,r,conditionId,value);
+                                this.addPassAction(c,r,value, rules.get(ruleIndex).getId(),criteria.get(criterionIndex).getId(), conditionId);
 //                                if (r.containsKey(c.getPerson().getId())) {
 //                                    r.get(c.getPerson().getId()).add(RunResult.builder().isPass(true).personId(c.getPerson().getId()).conditionId(conditionId).actualValue(value).build());
 //                                } else {
@@ -152,7 +174,7 @@ public class RuleEngineService {
 //                                }
                             })
                             .orElse((c, r)->{
-                                this.addFailAction(c,r,conditionId,value);
+                                this.addFailAction(c,r,value, rules.get(ruleIndex).getId(),criteria.get(criterionIndex).getId(), conditionId);
 //                                if (r.containsKey(c.getPerson().getId())) {
 //                                    r.get(c.getPerson().getId()).add(RunResult.builder().isPass(false).personId(c.getPerson().getId()).conditionId(conditionId).actualValue(value).build());
 //                                } else {
@@ -169,23 +191,31 @@ public class RuleEngineService {
         return ruleEngineRules;
     }
 
-    private void addPassAction(RuleEngineSubject c, Map<Long, List<RunResult>> r, Long conditionId, String value) {
+    private void addPassAction(RuleEngineSubject c, Map<Long, RuleEngineResult> r, String value, Long ruleId, Long criterionId, Long conditionId) {
         if (r.containsKey(c.getPerson().getId())) {
-            r.get(c.getPerson().getId()).add(RunResult.builder().isPass(true).personId(c.getPerson().getId()).conditionId(conditionId).actualValue(value).build());
+            RuleEngineResult result = r.get(c.getPerson().getId());
+            result.updateRunResultsWithPass(c, conditionId, value);
+            result.updateResultMatrix(ruleId, criterionId, conditionId, true);
         } else {
-            r.put(c.getPerson().getId(), new ArrayList<>() {{
-                add(RunResult.builder().isPass(true).personId(c.getPerson().getId()).conditionId(conditionId).actualValue(value).build());
-            }});
+            RuleEngineResult result = new RuleEngineResult();
+            result.updateRunResultsWithPass(c, conditionId, value);
+            result.updateResultMatrix(ruleId, criterionId, conditionId, true);
+
+            r.put(c.getPerson().getId(), result);
         }
     }
 
-    private void addFailAction(RuleEngineSubject c, Map<Long, List<RunResult>> r, Long conditionId, String value) {
+    private void addFailAction(RuleEngineSubject c, Map<Long,RuleEngineResult> r, String value, Long ruleId, Long criterionId, Long conditionId) {
         if (r.containsKey(c.getPerson().getId())) {
-            r.get(c.getPerson().getId()).add(RunResult.builder().isPass(false).personId(c.getPerson().getId()).conditionId(conditionId).actualValue(value).build());
+            RuleEngineResult result = r.get(c.getPerson().getId());
+            result.updateRunResultsWithFail(c, conditionId, value);
+            result.updateResultMatrix(ruleId, criterionId, conditionId, false);
         } else {
-            r.put(c.getPerson().getId(), new ArrayList<>() {{
-                add(RunResult.builder().isPass(false).personId(c.getPerson().getId()).conditionId(conditionId).actualValue(value).build());
-            }});
+            RuleEngineResult result = new RuleEngineResult();
+            result.updateRunResultsWithFail(c, conditionId, value);
+            result.updateResultMatrix(ruleId, criterionId, conditionId, false);
+
+            r.put(c.getPerson().getId(), result);
         }
     }
 

@@ -28,5 +28,6 @@ public class Condition {
     private Operator operator;
     private String value;
     private LocalDateTime asOf;
-    private boolean deleted;
+    private Boolean pass;
+    private Boolean deleted;
 }

@@ -19,7 +19,7 @@ import java.util.List;
 @Entity
 public class Rule {
     @Id
-    private String id;
+    private Long id;
     private DisbursementSchemeConfig disbursementSchemeConfig;
     private int sequence;
     private String description;
