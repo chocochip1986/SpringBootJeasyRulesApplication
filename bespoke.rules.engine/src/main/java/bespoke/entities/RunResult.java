@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Data
 @AllArgsConstructor
@@ -13,6 +14,7 @@ import javax.persistence.Entity;
 @Builder
 @Entity
 public class RunResult {
+    @Id
     private String id;
     private Long personId;
     private String ruleName;

@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
 
 @Data
@@ -22,6 +23,8 @@ public class Condition {
     @Id
     private Long id;
     private int sequence;
+    @OneToOne
+    private Criterion criterion;
     @Enumerated(EnumType.STRING)
     private Parameter parameter;
     @Enumerated(EnumType.STRING)

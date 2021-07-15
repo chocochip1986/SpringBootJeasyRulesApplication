@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.List;
 
 @Data
@@ -20,6 +21,7 @@ import java.util.List;
 public class Rule {
     @Id
     private Long id;
+    @OneToOne
     private DisbursementSchemeConfig disbursementSchemeConfig;
     private int sequence;
     private String description;
