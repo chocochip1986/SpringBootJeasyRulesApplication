@@ -13,7 +13,7 @@ public class RuleEngineConfiguration {
     @Bean
     public RuleEngine<RuleEngineSubject, RunResult> ruleEngine() {
         return DefaultRuleEngine.<RuleEngineSubject, RunResult>builder()
-                .setPostProcessor(() -> {})
+                .setPostRuleProcessor((c) -> {})
                 .build();
     }
 }

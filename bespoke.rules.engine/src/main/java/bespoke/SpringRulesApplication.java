@@ -6,6 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SpringRulesApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SpringRulesApplication.class, args);
+        try {
+            SpringApplication.run(SpringRulesApplication.class, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -115,7 +115,7 @@ public class RuleEngineService {
     }
 
     public void processCohortPage(RuleEngineFourDto dto) {
-        DefaultRuleEngine<RuleEngineSubject, Map<Long, RuleEngineResult>> ruleEngine = DefaultRuleEngine.<RuleEngineSubject, Map<Long, RuleEngineResult>>builder().build();
+        DefaultRuleEngine<RuleEngineSubject, Map<Long, RuleEngineResult>> ruleEngine = initRuleEngine();
 
         List<RuleEngineSubject> subjects = dto.getSubjects();
         Map<Long, RuleEngineResult> runResults = new HashMap<>();
@@ -126,6 +126,15 @@ public class RuleEngineService {
         List<RunSummary> runSummaries = Collections.unmodifiableList(processRunSummaries(runResults));
         List<RunResult> combinedRunResults = Collections.unmodifiableList(processRunResults(runResults));
         send("topic.six", RuleEngineFiveDto.builder().runSummaries(runSummaries).runResults(combinedRunResults).build());
+    }
+
+    private DefaultRuleEngine<RuleEngineSubject, Map<Long, RuleEngineResult>> initRuleEngine() {
+        return DefaultRuleEngine.<RuleEngineSubject, Map<Long, RuleEngineResult>>builder()
+                .setPreRuleProcessor((c) -> {})
+                .setPostRulesProcessor((c) -> {
+                    System.out.println("Person "+c.getPerson().getId()+" passed all rules!");
+                })
+                .build();
     }
 
     public void persistCohortPageInfo(RuleEngineFiveDto dto) {
