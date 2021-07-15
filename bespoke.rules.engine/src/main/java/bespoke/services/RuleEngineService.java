@@ -19,6 +19,8 @@ import bespoke.enums.Parameter;
 import bespoke.jpa.AddressJpaRepo;
 import bespoke.jpa.DisbursementSchemeConfigJpaRepo;
 import bespoke.jpa.PersonJpaRepo;
+import bespoke.jpa.RunResultJpaRepo;
+import bespoke.jpa.RunSummaryJpaRepo;
 import bespoke.rule.engine.DefaultRuleEngine;
 import bespoke.rules.Rules;
 import bespoke.rules.SimpleRule;
@@ -27,6 +29,7 @@ import bespoke.rules.poojo.RuleEngineSubject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +48,8 @@ public class RuleEngineService {
     @Autowired private DisbursementSchemeConfigJpaRepo disbursementSchemeConfigJpaRepo;
     @Autowired private PersonJpaRepo personJpaRepo;
     @Autowired private AddressJpaRepo addressJpaRepo;
+    @Autowired private RunSummaryJpaRepo runSummaryJpaRepo;
+    @Autowired private RunResultJpaRepo runResultJpaRepo;
 
     private int pageSize = 3;
 
@@ -124,7 +129,22 @@ public class RuleEngineService {
     }
 
     public void persistCohortPageInfo(RuleEngineFiveDto dto) {
-
+        try {
+            runSummaryJpaRepo.saveAll(dto.getRunSummaries());
+            runResultJpaRepo.saveAll(dto.getRunResults());
+        } catch (DataAccessException e) {
+            System.out.println("Jialat la!");
+            e.printStackTrace();
+            throw e;
+        } catch (RuntimeException e) {
+            System.out.println("Jialat leh!");
+            e.printStackTrace();
+            throw e;
+        } catch (Exception e) {
+            System.out.println("Jialat lor!");
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     private List<RunResult> processRunResults(Map<Long, RuleEngineResult> runResults) {
