@@ -40,4 +40,8 @@ public class Condition {
     private LocalDateTime asOf;
     private Boolean pass;
     private Boolean deleted;
+
+    public String toString() {
+        return "";
+    }
 }

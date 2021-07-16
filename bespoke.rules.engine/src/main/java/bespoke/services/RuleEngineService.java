@@ -255,6 +255,7 @@ public class RuleEngineService {
             this.kafkaProducer.sendMessage(topic, convert(dto));
         } catch (JsonProcessingException e) {
             System.out.println("Cannot send la!");
+            e.printStackTrace();
         }
     }
 

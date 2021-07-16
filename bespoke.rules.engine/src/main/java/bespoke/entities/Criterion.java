@@ -1,5 +1,6 @@
 package bespoke.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,6 +34,11 @@ public class Criterion {
     private Rule rule;
     private String description;
     private boolean deleted;
+    @JsonIgnore
     @OneToMany(mappedBy = "criterion", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Condition> conditionList;
+
+    public String toString() {
+        return "";
+    }
 }

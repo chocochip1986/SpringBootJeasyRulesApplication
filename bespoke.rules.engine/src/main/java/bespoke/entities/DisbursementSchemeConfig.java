@@ -1,6 +1,7 @@
 package bespoke.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +28,11 @@ public class DisbursementSchemeConfig {
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "config_generator")
     private Long id;
 
-    @OneToMany(mappedBy = "disbursementSchemeConfig", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    @OneToMany(mappedBy = "disbursementSchemeConfig", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Rule> rules;
+
+    public String toString() {
+        return "";
+    }
 }
