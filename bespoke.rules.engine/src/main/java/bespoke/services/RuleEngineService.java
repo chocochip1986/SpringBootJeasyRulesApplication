@@ -80,7 +80,13 @@ public class RuleEngineService {
             return;
         }
 
-        Rules<RuleEngineSubject, Map<Long, RuleEngineResult>> rules = generateRuleEngineRules(dto.getRules());
+        DisbursementSchemeConfig config = this.disbursementSchemeConfigJpaRepo.findById(dto.getConfig().getId()).orElse(null);
+        if(Objects.isNull(config)) {
+            System.out.println("No config found!");
+            return;
+        }
+
+        Rules<RuleEngineSubject, Map<Long, RuleEngineResult>> rules = generateRuleEngineRules(config.getRules());
 
         if(Objects.isNull(rules) || rules.isEmpty()) {
             System.out.println("No List<SimpleRule<RuleEngineSubject, List<RunResult>>> rules la!");
@@ -177,6 +183,7 @@ public class RuleEngineService {
 
     public Rules<RuleEngineSubject, Map<Long, RuleEngineResult>> generateRuleEngineRules(List<Rule> rules) {
         Rules<RuleEngineSubject, Map<Long, RuleEngineResult>> ruleEngineRules = new Rules<>();
+        int count = 0;
         for ( int i = 0 ; i < rules.size() ; i++ ) {
             List<Criterion> criteria = rules.get(i).getCriteriaList();
             for ( int j = 0 ; j < criteria.size() ; j++ ) {
@@ -193,6 +200,7 @@ public class RuleEngineService {
                     int criterionIndex = j;
                     rule = rule.name("")
                             .description("")
+                            .priority(count++)
                             .when(parameter.create(conditions.get(k).getOperator(), conditions.get(k).getValue()))
                             .then((c, r) -> {
                                 this.addPassAction(c,r,value, rules.get(ruleIndex).getId(),criteria.get(criterionIndex).getId(), conditionId);

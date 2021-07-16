@@ -17,7 +17,6 @@ public class Rules<C,R> {
 
     public void addRule(Rule<C,R> rule) {
         if( this.rules.contains(rule) ) {
-            this.rules.remove(rule);
         } else {
             this.rules.add(rule);
         }
