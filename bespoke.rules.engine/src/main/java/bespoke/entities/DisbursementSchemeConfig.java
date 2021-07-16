@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,6 +27,6 @@ public class DisbursementSchemeConfig {
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "config_generator")
     private Long id;
 
-    @OneToMany(mappedBy = "disbursementSchemeConfig", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "disbursementSchemeConfig", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rule> rules;
 }
