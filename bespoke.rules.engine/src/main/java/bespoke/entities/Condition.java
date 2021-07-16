@@ -13,7 +13,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Data
@@ -21,12 +23,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(name = "condition")
 public class Condition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "condition_generator")
     private Long id;
     private int sequence;
     @OneToOne
+    @JoinColumn(name = "criterion_id", referencedColumnName = "id", nullable = false)
     private Criterion criterion;
     @Enumerated(EnumType.STRING)
     private Parameter parameter;

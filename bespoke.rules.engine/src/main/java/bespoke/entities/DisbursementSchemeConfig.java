@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 @Data
@@ -19,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(name = "disbursement_scheme_config")
 public class DisbursementSchemeConfig {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "config_generator")

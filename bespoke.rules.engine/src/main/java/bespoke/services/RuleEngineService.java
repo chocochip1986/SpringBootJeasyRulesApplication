@@ -55,7 +55,7 @@ public class RuleEngineService {
 
     public void init() {
         try {
-            kafkaProducer.sendMessage("topic.one", convert(InitRuleEngineDto.builder().build()));
+            kafkaProducer.sendMessage("topic.one", convert(InitRuleEngineDto.builder().id(1L).build()));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

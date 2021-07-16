@@ -81,6 +81,7 @@ public class KafkaConsumers {
             return this.objectMapper.readValue(payload, klass);
         } catch (IOException e) {
             System.out.println("Unable to parse to "+InitRuleEngineDto.class.getName());
+            e.printStackTrace();
             return null;
         }
     }
