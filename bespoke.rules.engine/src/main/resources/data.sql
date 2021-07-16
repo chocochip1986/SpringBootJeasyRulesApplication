@@ -4,33 +4,29 @@ INSERT INTO DISBURSEMENT_SCHEME_CONFIG (id) VALUES
 
 INSERT INTO RULE (id, disbursement_scheme_config_id, sequence, description, deleted) VALUES
 (1, 1, 1, 'First rule', FALSE),
-(2, 1, 1, 'Deleted rule', TRUE),
-(3, 1, 1, 'Third rule', FALSE),
-(4, 1, 1, 'Fourth rule', FALSE);
+(2, 1, 1, 'Deleted rule', TRUE);
 
 
 INSERT INTO CRITERION (id, sequence, rule_id, description, deleted) VALUES
 (1, 1, 1, 'Criterion 1', FALSE),
-(2, 1, 2, 'Criterion 2', TRUE),
-(3, 1, 4, 'Criterion 3', FALSE),
-(4, 1, 3, 'Criterion 4', FALSE),
-(5, 1, 2, 'Criterion 5', FALSE),
-(6, 1, 4, 'Criterion 6', TRUE),
-(7, 1, 3, 'Criterion 7', FALSE),
-(8, 1, 1, 'Criterion 8', TRUE);
+(2, 1, 1, 'Criterion 2', TRUE),
+(3, 1, 2, 'Criterion 3', FALSE),
+(4, 1, 2, 'Criterion 4', FALSE);
 
 
-INSERT INTO CONDITION (id, sequence, criterion_id, parameter, operator, value, as_of, pass, deleted) VALUES
-(1, 1, 4, 'birthDate', 'SMALLER_THAN', CAST(CURRENT_TIMESTAMP(0) AS VARCHAR(255)), CURRENT_TIMESTAMP(0), TRUE, FALSE),
-(2, 1, 1, 'deathDate', 'EQUAL_TO', 'NULL', CURRENT_TIMESTAMP(0), TRUE, FALSE),
-(3, 1, 5, 'income', 'GREATER_THAN', '1000000', CURRENT_TIMESTAMP(0), TRUE, TRUE),
-(4, 1, 6, 'income', 'SMALLER_THAN', '200000', CURRENT_TIMESTAMP(0), TRUE, FALSE),
-(5, 1, 3, 'income', 'SMALLER_THAN', '10000', CURRENT_TIMESTAMP(0), TRUE, FALSE),
-(6, 1, 7, 'birthDate', 'GREATER_THAN', CAST(CURRENT_TIMESTAMP(0) AS VARCHAR(255)), CURRENT_TIMESTAMP(0), TRUE, FALSE),
-(7, 1, 4, 'nationality', 'EQUAL_TO', 'Singaporean', CURRENT_TIMESTAMP(0), TRUE, FALSE),
-(8, 1, 1, 'citizenshipAttainmentDate', 'SMALLER_THAN', CAST(CURRENT_TIMESTAMP(0) AS VARCHAR(255)), CURRENT_TIMESTAMP(0), TRUE, FALSE),
-(9, 1, 7, 'citizenshipAttainmentDate', 'EQUAL_TO', 'NULL', CURRENT_TIMESTAMP(0), TRUE, FALSE),
-(10, 1, 6, 'income', 'GREATER_THAN', '1000', CURRENT_TIMESTAMP(0), TRUE, TRUE);
+INSERT INTO CONDITION (id, sequence, criterion_id, parameter, operator, value, pass) VALUES
+(1, 1, 4, 'LIVING_STATUS', 'EQUAL_TO', 'TRUE', NULL),
+(2, 1, 2, 'LIVING_STATUS', 'EQUAL_TO', 'TRUE', NULL),
+(3, 1, 3, 'LIVING_STATUS', 'EQUAL_TO', 'TRUE', NULL),
+(4, 1, 1, 'LIVING_STATUS', 'EQUAL_TO', 'TRUE', NULL),
+(5, 1, 1, 'AGE', 'GREATER_THAN', '18', NULL),
+(6, 1, 4, 'AGE', 'GREATER_THAN', '18', NULL),
+(7, 1, 4, 'NATIONALITY', 'EQUAL_TO', 'Singaporean', NULL),
+(8, 1, 3, 'NATIONALITY', 'EQUAL_TO', 'Singaporean', NULL),
+(9, 1, 2, 'NATIONALITY', 'EQUAL_TO', 'Singaporean', NULL),
+(10, 1, 1, 'NATIONALITY', 'EQUAL_TO', 'Singaporean', NULL),
+(11, 1, 2, 'AGE', 'SMALLER_THAN', '55', NULL),
+(12, 1, 3, 'AGE', 'SMALLER_THAN', '55', NULL);
 
 
 INSERT INTO PERSON (id, name, nric, nationality, birth_date, death_date, citizenship_attainment_date, income) VALUES
